@@ -85,26 +85,24 @@ io.on('connection', (socket) => {
 		// 	console.log('updated note title to database');
 		// });
 
-		// socket.on('add-comments', async ({ _id, content, commenter, reactions }) => {
-		// 	await Note.findByIdAndUpdate(
-		// 		noteId,
-		// 		{
-		// 			$push: { comments: { _id, content, commenter, reactions } },
-		// 		},
-		// 		{ returnDocument: 'after' },
-		// 		(err, doc, res) => {
-		// 			if (err) {
-		// 				console.log(err);
-		// 				return;
-		// 			}
-		// 			console.log(doc);
-		// 			console.log(res);
-		// 			socket.broadcast.to(noteId).emit('comment-added', doc);
-		// 		}
-		// 	);
+		socket.on('add-comments', async ({ id, content, commenter, reactions }) => {
+			const createdAt = new Date().getTime();
+			await Note.findByIdAndUpdate(noteId, {
+				$push: {
+					comments: {
+						id,
+						content,
+						commenter,
+						reactions,
+						createdAt,
+						isDelivered: true,
+					},
+				},
+			});
+			socket.emit(`delivered-${id}`, createdAt);
 
-		// 	console.log('updated note comments to database');
-		// });
+			console.log('updated note comments to database');
+		});
 
 		// socket.on('react-to-comment', async ({ commentId, reaction }) => {
 		// 	await Note.updateOne(

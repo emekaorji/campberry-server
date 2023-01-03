@@ -6,22 +6,21 @@ const Label = {
 };
 
 const User = {
-	_id: String,
+	id: String,
 	name: String,
 	email: String,
 	image: String,
 	permissions: [String],
 };
 
-const Comment = new Schema(
-	{
-		_id: String,
-		content: String,
-		commenter: User,
-		reactions: { type: [String], defaultValue: [] },
-	},
-	{ timestamps: true }
-);
+const Comment = {
+	id: String,
+	content: String,
+	createdAt: Date,
+	commenter: User,
+	reactions: [],
+	isDelivered: Boolean,
+};
 
 const Note = new Schema(
 	{
