@@ -40,7 +40,7 @@ io.on('connection', (socket) => {
 			console.log('received new changes from client ' + delta);
 		});
 
-		socket.on('update-content', async (content) => {
+		socket.on('save-content', async (content) => {
 			await Note.findByIdAndUpdate(noteId, { content });
 			console.log('updated note content in database');
 		});
@@ -80,9 +80,21 @@ io.on('connection', (socket) => {
 			console.log('updated note label in database');
 		});
 
-		// socket.on('update-collaborators', async (title) => {
-		// 	await Note.findByIdAndUpdate(noteId, { title });
-		// 	console.log('updated note title to database');
+		// socket.on('add-collaborators', async ({ id, name, email, image, permissions }) => {
+		// 	await Note.findByIdAndUpdate(noteId, {
+		// 		$push: {
+		// 			collaborators: {
+		// 				id,
+		// 				name,
+		// 				email,
+		// 				image,
+		// 				permissions
+		// 			},
+		// 		},
+		// 	});
+		// 	socket.emit(`delivered-${id}`, createdAt);
+
+		// 	console.log('updated note comments to database');
 		// });
 
 		socket.on('add-comments', async ({ id, content, commenter, reactions }) => {
